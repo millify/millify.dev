@@ -31,9 +31,7 @@ export default function Home() {
             /me
           </Link>
           <Link
-            href="http://localhost:3003"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/projects/sessions"
             className="underline-offset-4 transition-colors hover:text-primary hover:underline"
           >
             /sessions
