@@ -61,10 +61,21 @@ jobs:
       - name: Ensure app directory
         run: ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "mkdir -p /home/hrvoje/apps/millify"
 
+      - name: Remove old build artifacts on server
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
+            "cd /home/hrvoje/apps/millify && rm -rf .next public package.json package-lock.json next.config.ts"
+
       - name: Copy app to server
         run: |
           scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r app/. $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
 
       - name: Install deps and start app
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd /home/hrvoje/apps/millify && npm ci --omit=dev && (pm2 delete millify 2>/dev/null || true) && pm2 start npm --name millify -- start && pm2 save"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
+            "cd /home/hrvoje/apps/millify && npm ci --omit=dev && (pm2 delete millify 2>/dev/null || true) && pm2 start npm --name millify -- start && pm2 save"
+
+      - name: Verify deployment
+        run: |
+          DEPLOYED_ID=$(ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cat /home/hrvoje/apps/millify/.next/BUILD_ID 2>/dev/null" || echo "unknown")
+          echo "Deployed BUILD_ID: $DEPLOYED_ID"
