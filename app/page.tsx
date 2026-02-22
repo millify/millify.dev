@@ -23,7 +23,7 @@ export default function Home() {
             millify
           </span>
         </div>
-        <div className="mt-6 flex flex-col items-start gap-2 text-sm text-muted-foreground">
+        <div className="mt-6 flex flex-col items-start gap-2 text-lg text-muted-foreground">
           <Link
             href="/me"
             className="underline-offset-4 transition-colors hover:text-primary hover:underline"
