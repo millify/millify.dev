@@ -2,10 +2,10 @@ export const profile = {
   name: "Hrvoje Mlinarević",
   title: "Full-Stack Developer",
   location: "Zagreb, Croatia",
-  email: "hrvoje.mlinarevic@gmail.com",
+  email: "hrvoje@millify.dev",
   tagline:
-    "JavaScript developer building frontend interfaces with React.js and backend solutions with NestJS.",
-  bio: "I love solving real-world problems by creating web interfaces that aren't just functional, but also intuitive and enjoyable. My mission is to make the web more accessible, so everyone can interact with it effortlessly.",
+    "Building web applications from frontend interfaces to backend systems.",
+  bio: "I like building things that matter — from backend systems and servers to interfaces that people actually enjoy using. My goal is to help make the web a bit more approachable for everyone.",
 };
 
 export const experience = [
@@ -17,10 +17,10 @@ export const experience = [
     period: "Oct 2024 — Present",
     location: "Croatia (On site)",
     highlights: [
-      "Integrated and developed APIs for web and mobile applications",
-      "Debugged and optimized client and server code across the stack",
-      "Handled full dev cycle from implementation through deployment",
-      "Participated in code reviews and QA to maintain quality standards",
+      "Building APIs that connect web and mobile apps",
+      "Debugging and optimizing code across the full stack",
+      "Taking features from development through to deployment",
+      "Contributing to code reviews and QA to keep quality high",
     ],
   },
   {
@@ -52,41 +52,51 @@ export const experience = [
   },
 ];
 
-export const projects = [
-  {
-    name: "Crosswit",
-    description: "Portfolio project",
-  },
-  {
-    name: "Moviesnacks",
-    description: "Portfolio project",
-  },
+export type Project = {
+  name: string;
+  description?: string;
+  url?: string;
+  logo?: string;
+  logoSymbol?: "square";
+};
+
+export const projects: Project[] = [
   {
     name: "Session Timer",
     description: "Portfolio project",
+    logoSymbol: "square",
+    url: "http://localhost:3003",
   },
 ];
 
-export const skills = [
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "TypeScript",
-  "React.js",
-  "Next.js",
-  "Vue.js",
-  "Node.js",
-  "Nest.js",
-  "MySQL",
-  "Tailwind CSS",
-  "Docker",
-  "Shell",
-];
+const DEVICON = (name: string) =>
+  `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${name}/${name}-original.svg`;
+
+export const skillsByCategory = {
+  frontend: [
+    { name: "HTML", icon: DEVICON("html5") },
+    { name: "CSS", icon: DEVICON("css3") },
+    { name: "JavaScript", icon: DEVICON("javascript") },
+    { name: "TypeScript", icon: DEVICON("typescript") },
+    { name: "React", icon: DEVICON("react") },
+    { name: "Next.js", icon: DEVICON("nextjs") },
+    { name: "Vue.js", icon: DEVICON("vuejs") },
+    { name: "Tailwind CSS", icon: DEVICON("tailwindcss") },
+  ],
+  backend: [
+    { name: "Node.js", icon: DEVICON("nodejs") },
+    { name: "Nest.js", icon: DEVICON("nestjs") },
+    { name: "MySQL", icon: DEVICON("mysql") },
+    { name: "Docker", icon: DEVICON("docker") },
+    { name: "Shell", icon: DEVICON("bash") },
+  ],
+};
 
 export const education = {
-  school: "College of Market Communications Agora",
-  degree: "Bachelor's degree in Marketing Communications",
-  period: "2009 — 2012",
+  selfTaught: {
+    intro:
+      "In 2020, I started learning JavaScript through courses on Udemy and spent a lot of time practicing algorithmic problems on platforms like Codewars. That experience helped me better understand problem-solving and how to write efficient code. By building my own projects along the way, I developed a good technical foundation and became comfortable working with various libraries and frameworks within the JavaScript ecosystem.",
+  },
 };
 
 export const interests = [
