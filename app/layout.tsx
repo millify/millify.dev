@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   title: "Hrvoje Mlinarević | Full-Stack Developer",
   description:
     "JavaScript developer building frontend interfaces with React.js and backend solutions with NestJS. Based in Zagreb, Croatia.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export const viewport = {
