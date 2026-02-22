@@ -1,26 +1,44 @@
 import Link from "next/link";
+import { SpinningWindmill } from "@/components/windmill";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-slate-100">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
       <div
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(251,191,36,0.12),transparent)]"
+        className="pointer-events-none fixed inset-0 bg-[linear-gradient(to_bottom,rgba(184,168,138,0.06)_0%,transparent_40%,transparent_60%,rgba(184,168,138,0.04)_100%)]"
         aria-hidden
       />
-      <div className="relative text-center">
-        <h1 className="mb-4 text-2xl font-semibold text-white md:text-3xl">
-          millify.dev
-        </h1>
-        <p className="mb-8 text-slate-400">
-          Full-stack developer portfolio
-        </p>
-        <Link
-          href="/me"
-          className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-6 py-3 font-medium text-slate-900 transition-colors hover:bg-amber-400"
-        >
-          View portfolio
-          <span aria-hidden>→</span>
-        </Link>
+      <div className="relative flex w-full flex-col items-center text-center">
+        <div className="mb-4 flex items-baseline justify-center gap-0.5 md:mb-5">
+          <SpinningWindmill size={1.5} />
+          <span
+            style={{
+              fontFamily: 'var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif',
+              fontWeight: 700,
+              fontSize: "2rem",
+              letterSpacing: "-0.02em",
+              color: "var(--accent-champagne)",
+            }}
+          >
+            millify
+          </span>
+        </div>
+        <div className="mt-6 flex flex-col items-start gap-2 text-sm text-muted-foreground">
+          <Link
+            href="/me"
+            className="underline-offset-4 transition-colors hover:text-primary hover:underline"
+          >
+            /me
+          </Link>
+          <Link
+            href="http://localhost:3003"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-4 transition-colors hover:text-primary hover:underline"
+          >
+            /sessions
+          </Link>
+        </div>
       </div>
     </div>
   );

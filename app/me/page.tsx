@@ -1,14 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import { Mail } from "lucide-react";
 import {
   profile,
   experience,
   projects,
-  skills,
+  skillsByCategory,
   education,
   interests,
   languages,
 } from "@/lib/portfolio-data";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { StarTrekPopup } from "./star-trek-popup";
+import { CollapsibleSection } from "./collapsible-section";
+import { SquareLogo } from "@/components/square-logo";
 
 export const metadata: Metadata = {
   title: "Hrvoje Mlinarević | Full-Stack Developer",
@@ -25,8 +37,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24">
-      <h2 className="mb-6 text-sm font-semibold uppercase tracking-wider text-amber-500">
+    <section id={id} className="scroll-mt-20 sm:scroll-mt-24">
+      <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-primary">
         {title}
       </h2>
       {children}
@@ -36,76 +48,75 @@ function Section({
 
 export default function PortfolioPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Decorative gradient */}
       <div
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(251,191,36,0.15),transparent)]"
+        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(184,168,138,0.06),transparent)]"
         aria-hidden
       />
 
-      <div className="relative mx-auto max-w-2xl px-6 py-16 md:px-8 md:py-24">
+      <div className="relative mx-auto max-w-2xl px-4 py-10 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-12 md:px-8 md:py-16">
         {/* Header / Hero */}
-        <header className="mb-20">
-          <nav className="mb-12 flex items-center gap-6 text-sm text-slate-400">
+        <header id="top" className="mb-10 sm:mb-12 md:mb-16 scroll-mt-20">
+          <nav className="mb-8 flex items-center gap-4 text-sm text-muted-foreground sm:mb-10">
             <Link
               href="/"
-              className="transition-colors hover:text-amber-400"
+              className="min-h-[44px] min-w-[44px] -m-2 flex items-center justify-center rounded p-2 transition-colors hover:text-primary"
             >
               millify.dev
             </Link>
-            <span className="text-slate-600">/</span>
-            <span className="text-slate-200">me</span>
+            <span className="text-muted-foreground/60">/</span>
+            <span className="text-foreground">me</span>
           </nav>
 
-          <h1 className="mb-2 text-4xl font-bold tracking-tight text-white md:text-5xl">
+          <h1 className="mb-1.5 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             {profile.name}
           </h1>
-          <p className="mb-4 text-xl text-amber-400">{profile.title}</p>
-          <p className="mb-6 max-w-xl text-slate-400">{profile.tagline}</p>
-          <div className="flex flex-wrap gap-4 text-sm">
+          <p className="mb-3 text-sm text-primary sm:text-base">{profile.title}</p>
+          <p className="mb-4 max-w-xl text-sm text-muted-foreground">{profile.tagline}</p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 text-xs">
             <a
               href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/50 px-4 py-2 text-slate-300 transition-colors hover:border-amber-500/50 hover:text-amber-400"
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 self-start rounded-full bg-primary px-5 py-3 font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90 sm:py-2.5 sm:min-h-0"
             >
+              <Mail className="size-4" aria-hidden />
               {profile.email}
             </a>
-            <span className="flex items-center text-slate-500">
-              {profile.location}
-            </span>
           </div>
         </header>
 
-        <main className="space-y-16">
+        <main className="space-y-10 md:space-y-12">
           {/* About */}
-          <Section id="about" title="About">
-            <p className="leading-relaxed text-slate-300">{profile.bio}</p>
-          </Section>
+          {/* <Section id="about" title="About">
+            <p className="leading-relaxed text-muted-foreground">{profile.bio}</p>
+          </Section> */}
 
           {/* Experience */}
-          <Section id="experience" title="Experience">
-            <ul className="space-y-10">
+          <CollapsibleSection id="experience" title="Experience" defaultOpen={false}>
+            <ul className="space-y-6 sm:space-y-8">
               {experience.map((job) => (
-                <li key={job.company} className="border-l-2 border-slate-800 pl-6">
+                <li key={job.company} className="border-l-2 border-border pl-4">
                   <div className="mb-1 flex flex-wrap items-baseline gap-2">
-                    <h3 className="font-semibold text-white">{job.company}</h3>
-                    <span className="text-sm text-slate-500">·</span>
-                    <span className="text-sm text-amber-400">{job.role}</span>
+                    <h3 className="text-sm font-semibold text-foreground">{job.company}</h3>
+                    <span className="text-xs text-muted-foreground/80">·</span>
+                    <span className="text-sm text-primary">{job.role}</span>
                   </div>
-                  <p className="mb-2 text-sm text-slate-400">{job.description}</p>
-                  <p className="mb-3 text-xs text-slate-500">
+                  <p className="mb-2 text-sm text-muted-foreground">{job.description}</p>
+                  <p className="mb-3 text-xs text-muted-foreground/80">
                     {job.period} · {job.location}
                   </p>
                   <div className="mb-3 flex flex-wrap gap-2">
                     {job.tech.map((tech) => (
-                      <span
+                      <Badge
                         key={tech}
-                        className="rounded-md bg-slate-800/80 px-2 py-0.5 font-mono text-xs text-slate-400"
+                        variant="secondary"
+                        className="rounded-md border-0 bg-secondary/80 px-2 py-0.5 font-mono text-xs text-muted-foreground"
                       >
                         {tech}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
-                  <ul className="list-inside list-disc space-y-1 text-sm text-slate-400">
+                  <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground">
                     {job.highlights.map((h) => (
                       <li key={h}>{h}</li>
                     ))}
@@ -113,59 +124,129 @@ export default function PortfolioPage() {
                 </li>
               ))}
             </ul>
-          </Section>
+          </CollapsibleSection>
 
           {/* Projects */}
           <Section id="projects" title="Projects">
-            <ul className="space-y-4">
-              {projects.map((project) => (
-                <li
-                  key={project.name}
-                  className="rounded-lg border border-slate-800 bg-slate-900/30 p-4 transition-colors hover:border-slate-700"
-                >
-                  <h3 className="font-medium text-white">{project.name}</h3>
-                  <p className="text-sm text-slate-400">{project.description}</p>
-                </li>
-              ))}
+            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {projects.map((project) => {
+                const Wrapper = "url" in project && project.url ? "a" : "div";
+                const wrapperProps =
+                  Wrapper === "a"
+                    ? { href: project.url, target: "_blank", rel: "noopener noreferrer" }
+                    : {};
+                return (
+                  <Wrapper key={project.name} {...wrapperProps}>
+                    <Card
+                      className={
+                        Wrapper === "a"
+                          ? "border-border bg-card/50 transition-colors hover:border-primary/30 hover:bg-card/80 cursor-pointer"
+                          : "border-border bg-card/50 transition-colors hover:border-primary/30"
+                      }
+                    >
+                      <CardHeader className="flex flex-row items-center gap-3 px-4 pb-2 sm:px-6">
+                        {project.logoSymbol === "square" ? (
+                          <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
+                            <SquareLogo className="size-5" />
+                          </div>
+                        ) : project.logo ? (
+                          <Image
+                            src={project.logo}
+                            alt=""
+                            width={28}
+                            height={28}
+                            className="size-7 shrink-0 rounded object-contain"
+                          />
+                        ) : null}
+                        <h3 className="text-sm font-medium text-foreground">{project.name}</h3>
+                      </CardHeader>
+                    </Card>
+                  </Wrapper>
+                );
+              })}
             </ul>
-          </Section>
-
-          {/* Skills */}
-          <Section id="skills" title="Technologies">
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-full bg-slate-800 px-3 py-1 text-sm text-slate-300"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
           </Section>
 
           {/* Education */}
           <Section id="education" title="Education">
-            <div className="rounded-lg border border-slate-800 bg-slate-900/30 p-4">
-              <h3 className="font-medium text-white">{education.school}</h3>
-              <p className="text-slate-400">{education.degree}</p>
-              <p className="text-sm text-slate-500">{education.period}</p>
+            <div className="space-y-4">
+                <p className="leading-relaxed text-sm text-muted-foreground">
+                  {education.selfTaught.intro}
+                </p>
+            </div>
+          </Section>
+
+          {/* Skills */}
+          <Section id="skills" title="Technologies">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-xl border border-border bg-muted/20 p-4">
+                <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-primary">
+                  Frontend
+                </span>
+                <div className="flex flex-wrap justify-start gap-2">
+                  {skillsByCategory.frontend.map((tech) => (
+                    <Tooltip key={tech.name}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex flex-col items-center transition-transform hover:scale-105 border-0 bg-transparent p-0 cursor-default"
+                        >
+                          <div className="flex size-11 items-center justify-center rounded-xl border border-border/80 bg-background/80 p-2.5 shadow-sm transition-all hover:border-primary/30">
+                            <img
+                              src={tech.icon}
+                              alt=""
+                              className="size-5 object-contain"
+                            />
+                          </div>
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">{tech.name}</TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
+              <div className="min-w-0 rounded-xl border border-border bg-muted/20 p-4">
+                <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-primary">
+                  Backend
+                </span>
+                <div className="flex flex-wrap justify-start gap-2">
+                  {skillsByCategory.backend.map((tech) => (
+                    <Tooltip key={tech.name}>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex shrink-0 flex-col items-center transition-transform hover:scale-105 border-0 bg-transparent p-0 cursor-default"
+                        >
+                          <div className="flex size-10 items-center justify-center rounded-lg border border-border/80 bg-background/80 p-2 shadow-sm transition-all hover:border-primary/30">
+                            <img
+                              src={tech.icon}
+                              alt=""
+                              className="size-5 object-contain"
+                            />
+                          </div>
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">{tech.name}</TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
             </div>
           </Section>
 
           {/* Interests & Languages */}
-          <div className="grid gap-12 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
             <Section id="interests" title="Interests">
-              <p className="text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 {interests.join(" · ")}
               </p>
             </Section>
             <Section id="languages" title="Languages">
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {languages.map((lang) => (
-                  <li key={lang.name} className="text-slate-400">
-                    <span className="text-white">{lang.name}</span>
-                    <span className="text-slate-500"> — {lang.level}</span>
+                  <li key={lang.name} className="text-sm text-muted-foreground">
+                    <span className="text-foreground">{lang.name}</span>
+                    <span className="text-muted-foreground/80"> — {lang.level}</span>
                   </li>
                 ))}
               </ul>
@@ -174,15 +255,30 @@ export default function PortfolioPage() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-24 border-t border-slate-800 pt-12 text-center text-sm text-slate-500">
-          <a
-            href={`mailto:${profile.email}`}
-            className="text-amber-500 transition-colors hover:text-amber-400"
-          >
-            Get in touch
-          </a>
-          {" · "}
-          <span>Hrvoje Mlinarević © {new Date().getFullYear()}</span>
+        <footer className="mt-16 rounded-xl border border-border bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10">
+          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4 sm:text-left">
+            <div>
+              <Link
+                href="/"
+                className="text-sm font-medium text-foreground transition-colors hover:text-primary"
+              >
+                millify.dev
+              </Link>
+            </div>
+            <a
+              href={`mailto:${profile.email}`}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+            >
+              <Mail className="size-4" aria-hidden />
+              Get in touch
+            </a>
+          </div>
+          <div className="mt-4 flex flex-col items-center justify-between gap-3 border-t border-border/60 pt-4 text-xs text-muted-foreground sm:flex-row">
+            <span>© {new Date().getFullYear()} Hrvoje Mlinarević</span>
+            <span>
+              <StarTrekPopup />
+            </span>
+          </div>
         </footer>
       </div>
     </div>
