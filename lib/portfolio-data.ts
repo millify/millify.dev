@@ -65,7 +65,7 @@ export const projects: Project[] = [
     name: "Session Timer",
     description: "Portfolio project",
     logoSymbol: "square",
-    url: "http://localhost:3003",
+    url: "/projects/sessions",
   },
 ];
 

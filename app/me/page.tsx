@@ -128,40 +128,65 @@ export default function PortfolioPage() {
 
           {/* Projects */}
           <Section id="projects" title="Projects">
-            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <ul className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               {projects.map((project) => {
-                const Wrapper = "url" in project && project.url ? "a" : "div";
-                const wrapperProps =
-                  Wrapper === "a"
-                    ? { href: project.url, target: "_blank", rel: "noopener noreferrer" }
-                    : {};
-                return (
-                  <Wrapper key={project.name} {...wrapperProps}>
-                    <Card
-                      className={
-                        Wrapper === "a"
-                          ? "border-border bg-card/50 transition-colors hover:border-primary/30 hover:bg-card/80 cursor-pointer"
-                          : "border-border bg-card/50 transition-colors hover:border-primary/30"
-                      }
+                const url = "url" in project ? project.url : undefined;
+                const isInternal = url?.startsWith("/");
+                const gridClass =
+                  project.name === "Session Timer" ? "sm:col-span-2" : "sm:col-span-1";
+                const cardClassName = url
+                  ? "border-border bg-card/50 transition-colors hover:border-primary/30 hover:bg-card/80 cursor-pointer"
+                  : "border-border bg-card/50 transition-colors hover:border-primary/30";
+
+                const card = (
+                  <Card className={cardClassName}>
+                    <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 pb-2 sm:px-6">
+                      {project.logoSymbol === "square" ? (
+                        <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
+                          <SquareLogo className="size-5" />
+                        </div>
+                      ) : project.logo ? (
+                        <Image
+                          src={project.logo}
+                          alt=""
+                          width={28}
+                          height={28}
+                          className="size-7 shrink-0 rounded object-contain"
+                        />
+                      ) : null}
+                      <h3 className="text-base font-medium text-foreground">{project.name}</h3>
+                    </CardHeader>
+                  </Card>
+                );
+
+                if (isInternal && url) {
+                  return (
+                    <Link
+                      key={project.name}
+                      href={url}
+                      className={gridClass}
                     >
-                      <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 pb-2 sm:px-6">
-                        {project.logoSymbol === "square" ? (
-                          <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
-                            <SquareLogo className="size-5" />
-                          </div>
-                        ) : project.logo ? (
-                          <Image
-                            src={project.logo}
-                            alt=""
-                            width={28}
-                            height={28}
-                            className="size-7 shrink-0 rounded object-contain"
-                          />
-                        ) : null}
-                        <h3 className="text-base font-medium text-foreground">{project.name}</h3>
-                      </CardHeader>
-                    </Card>
-                  </Wrapper>
+                      {card}
+                    </Link>
+                  );
+                }
+                if (url) {
+                  return (
+                    <a
+                      key={project.name}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={gridClass}
+                    >
+                      {card}
+                    </a>
+                  );
+                }
+                return (
+                  <div key={project.name} className={gridClass}>
+                    {card}
+                  </div>
                 );
               })}
             </ul>
