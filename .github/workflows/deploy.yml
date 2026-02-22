@@ -67,4 +67,4 @@ jobs:
 
       - name: Install deps and start app
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd /home/hrvoje/apps/millify && npm ci --omit=dev && (pm2 restart millify || pm2 start npm --name millify -- start) && pm2 save"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cd /home/hrvoje/apps/millify && npm ci --omit=dev && (pm2 delete millify 2>/dev/null || true) && pm2 start npm --name millify -- start && pm2 save"
