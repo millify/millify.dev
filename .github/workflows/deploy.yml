@@ -70,12 +70,32 @@ jobs:
         run: |
           scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r app/. $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
 
-      - name: Install deps and start app
+      - name: Install deps
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
-            "cd /home/hrvoje/apps/millify && npm ci --omit=dev && (pm2 delete millify 2>/dev/null || true) && pm2 start npm --name millify -- start && pm2 save"
+            "cd /home/hrvoje/apps/millify && npm ci --omit=dev"
+
+      - name: Restart app with PM2
+        env:
+          DEPLOY_PORT: ${{ secrets.PORT }}
+        run: |
+          PORT_ENV=$([ -n "$DEPLOY_PORT" ] && echo "PORT=$DEPLOY_PORT" || echo "")
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
+            "cd /home/hrvoje/apps/millify && \
+            $PORT_ENV pm2 restart millify --update-env 2>/dev/null || \
+            $PORT_ENV pm2 start npm --name millify -- start && \
+            pm2 save"
 
       - name: Verify deployment
+        env:
+          DEPLOY_PORT: ${{ secrets.PORT }}
         run: |
+          VERIFY_PORT=${DEPLOY_PORT:-3000}
           DEPLOYED_ID=$(ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cat /home/hrvoje/apps/millify/.next/BUILD_ID 2>/dev/null" || echo "unknown")
           echo "Deployed BUILD_ID: $DEPLOYED_ID"
+          HTTP_CODE=$(ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$VERIFY_PORT/ --connect-timeout 5" || echo "000")
+          if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "304" ]; then
+            echo "::warning:: App may not be responding: HTTP $HTTP_CODE (expected 200)"
+          else
+            echo "App is responding: HTTP $HTTP_CODE"
+          fi
