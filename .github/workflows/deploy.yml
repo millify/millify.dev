@@ -27,16 +27,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Prepare deployment package
+        run: |
+          mkdir -p deploy
+          cp -r .next package.json package-lock.json public next.config.ts deploy/
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: millify-app
-          path: |
-            .next
-            package.json
-            package-lock.json
-            public
-            next.config.ts
+          path: deploy
 
   deploy:
     needs: build
@@ -62,7 +62,7 @@ jobs:
 
       - name: Copy app to server
         run: |
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r .next package.json package-lock.json public next.config.ts $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r deploy/. $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
 
       - name: Install deps and start app
         run: |
