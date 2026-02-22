@@ -62,7 +62,7 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    name: "Session Timer",
+    name: "Sessions",
     description: "Portfolio project",
     logoSymbol: "square",
     url: "/projects/sessions",

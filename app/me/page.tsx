@@ -103,18 +103,18 @@ export default function PortfolioPage() {
                   <p className="mb-3 text-sm text-muted-foreground/80">
                     {job.period} · {job.location}
                   </p>
-                  <div className="mb-3 flex flex-wrap gap-2">
+                  <div className="mb-3 flex flex-wrap gap-1.5 sm:gap-2">
                     {job.tech.map((tech) => (
                       <Badge
                         key={tech}
                         variant="secondary"
-                        className="rounded-md border-0 bg-secondary/80 px-2 py-0.5 font-mono text-sm text-muted-foreground"
+                        className="rounded-md border border-primary/20 bg-primary/8 px-1.5 py-0.5 font-mono text-xs text-primary/90 sm:px-2 sm:text-sm"
                       >
                         {tech}
                       </Badge>
                     ))}
                   </div>
-                  <ul className="list-inside list-disc space-y-1 text-base text-muted-foreground">
+                  <ul className="list-inside list-disc space-y-1 text-sm text-muted-foreground sm:text-base">
                     {job.highlights.map((h) => (
                       <li key={h}>{h}</li>
                     ))}
@@ -138,7 +138,7 @@ export default function PortfolioPage() {
                   <Card
                     className={cn(
                       "w-fit",
-                      project.name === "Session Timer" && "min-w-56",
+                      project.name === "Sessions" && "min-w-56",
                       cardClassName
                     )}
                   >
@@ -263,28 +263,26 @@ export default function PortfolioPage() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-16 rounded-xl bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10">
-          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:text-left">
-            <Link
-              href="/"
-              className="inline-flex items-center text-sm font-medium text-foreground transition-colors hover:text-primary"
-            >
-              millify.dev
-            </Link>
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
-            >
-              <Mail className="size-4" aria-hidden />
-              Get In Touch
-            </a>
-          </div>
-          <div className="mt-2 flex flex-col items-center justify-between gap-3 pt-2 text-xs text-muted-foreground sm:flex-row">
-            <span>© {new Date().getFullYear()} Hrvoje Mlinarević</span>
-            <span>
-              <StarTrekPopup />
-            </span>
-          </div>
+        <footer className="mt-16 flex flex-col items-center gap-4 text-center rounded-xl bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10 sm:grid sm:grid-cols-2 sm:grid-rows-2 sm:items-center sm:gap-4 sm:text-left">
+          <a
+            href={`mailto:${profile.email}`}
+            className="inline-flex items-center justify-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary sm:justify-self-end"
+          >
+            <Mail className="size-4" aria-hidden />
+            Get In Touch
+          </a>
+          <span className="text-xs text-muted-foreground sm:col-start-2 sm:row-start-2 sm:block sm:text-right">
+            <StarTrekPopup />
+          </span>
+          <span className="text-xs text-muted-foreground sm:col-start-1 sm:row-start-2 sm:block">
+            © {new Date().getFullYear()} Hrvoje Mlinarević
+          </span>
+          <Link
+            href="/"
+            className="inline-flex items-center text-sm font-medium text-foreground transition-colors hover:text-primary sm:col-start-1 sm:row-start-1 sm:justify-self-start"
+          >
+            millify.dev
+          </Link>
         </footer>
       </div>
     </div>
