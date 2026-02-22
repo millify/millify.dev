@@ -45,12 +45,11 @@ jobs:
       SSH_HOST: ${{ secrets.SERVER_HOST }}
       SSH_USER: ${{ secrets.SERVER_USER }}
     steps:
-      - uses: actions/checkout@v4
-
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: millify-app
+          path: app
 
       - name: Setup SSH key
         run: |
@@ -64,7 +63,7 @@ jobs:
 
       - name: Copy app to server
         run: |
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r .next package.json package-lock.json public next.config.ts $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r app/. $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
 
       - name: Install deps and start app
         run: |
