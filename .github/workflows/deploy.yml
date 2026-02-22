@@ -1,8 +1,9 @@
-# Build and deploy Millify (Next.js) to Hetzner.
+# Deploy Millify (Next.js) to Hetzner.
+# Mirrors manual flow: pull → install → build → start
 # Required secrets: SERVER_HOST, SERVER_USER, SSH_PRIVATE_KEY
 # Optional secret: PORT (default 3000)
-# Server needs: Node 20+, npm, PM2 (npm i -g pm2).
-name: Build and Deploy
+# Server needs: Node 20+, npm, PM2 (npm i -g pm2), git, repo cloned at /home/hrvoje/apps/millify
+name: Deploy
 
 on:
   push:
@@ -10,47 +11,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: millify-app
-          path: |
-            .next
-            package.json
-            package-lock.json
-            public
-            next.config.ts
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     env:
       SSH_HOST: ${{ secrets.SERVER_HOST }}
       SSH_USER: ${{ secrets.SERVER_USER }}
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: millify-app
-          path: app
-
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -58,30 +24,16 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null || true
 
-      - name: Ensure app directory
-        run: ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "mkdir -p /home/hrvoje/apps/millify"
-
-      - name: Remove old build artifacts on server
-        run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
-            "cd /home/hrvoje/apps/millify && rm -rf .next public package.json package-lock.json next.config.ts"
-
-      - name: Copy app to server
-        run: |
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -r app/. $SSH_USER@$SSH_HOST:/home/hrvoje/apps/millify/
-
-      - name: Install deps
-        run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
-            "cd /home/hrvoje/apps/millify && npm ci --omit=dev"
-
-      - name: Restart app with PM2
+      - name: Pull, install, build and restart
         env:
           DEPLOY_PORT: ${{ secrets.PORT }}
         run: |
           PORT_ENV=$([ -n "$DEPLOY_PORT" ] && echo "PORT=$DEPLOY_PORT" || echo "")
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
             "cd /home/hrvoje/apps/millify && \
+            git pull && \
+            npm ci && \
+            npm run build && \
             $PORT_ENV pm2 restart millify --update-env 2>/dev/null || \
             $PORT_ENV pm2 start npm --name millify -- start && \
             pm2 save"
