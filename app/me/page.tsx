@@ -8,8 +8,8 @@ import {
   projects,
   skillsByCategory,
   education,
-  languages,
 } from "@/lib/portfolio-data";
+import { cn } from "@/lib/utils";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,7 +18,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { StarTrekPopup } from "./star-trek-popup";
-import { CollapsibleSection } from "./collapsible-section";
 import { SquareLogo } from "@/components/square-logo";
 
 export const metadata: Metadata = {
@@ -56,7 +55,7 @@ export default function PortfolioPage() {
 
       <div className="relative mx-auto max-w-2xl px-4 py-10 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-12 md:px-8 md:py-16">
         {/* Header / Hero */}
-        <header id="top" className="mb-10 sm:mb-12 md:mb-16 scroll-mt-20">
+        <header id="top" className="mb-6 pb-6 sm:mb-8 sm:pb-8 md:mb-10 md:pb-10 scroll-mt-20">
           <nav className="mb-8 flex items-center gap-4 text-base text-muted-foreground sm:mb-10">
             <Link
               href="/"
@@ -91,7 +90,7 @@ export default function PortfolioPage() {
           </Section> */}
 
           {/* Experience */}
-          <CollapsibleSection id="experience" title="Experience" defaultOpen={false}>
+          <Section id="experience" title="Experience">
             <ul className="space-y-6 sm:space-y-8">
               {experience.map((job) => (
                 <li key={job.company} className="border-l-2 border-border pl-4">
@@ -123,23 +122,27 @@ export default function PortfolioPage() {
                 </li>
               ))}
             </ul>
-          </CollapsibleSection>
+          </Section>
 
           {/* Projects */}
           <Section id="projects" title="Projects">
-            <ul className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <ul className="flex flex-wrap gap-4">
               {projects.map((project) => {
                 const url = "url" in project ? project.url : undefined;
                 const isInternal = url?.startsWith("/");
-                const gridClass =
-                  project.name === "Session Timer" ? "sm:col-span-2" : "sm:col-span-1";
                 const cardClassName = url
                   ? "border-border bg-card/50 transition-colors hover:border-primary/30 hover:bg-card/80 cursor-pointer"
                   : "border-border bg-card/50 transition-colors hover:border-primary/30";
 
                 const card = (
-                  <Card className={cardClassName}>
-                    <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 pb-2 sm:px-6">
+                  <Card
+                    className={cn(
+                      "w-fit",
+                      project.name === "Session Timer" && "min-w-56",
+                      cardClassName
+                    )}
+                  >
+                    <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 py-4 sm:px-6">
                       {project.logoSymbol === "square" ? (
                         <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
                           <SquareLogo className="size-5" />
@@ -163,7 +166,7 @@ export default function PortfolioPage() {
                     <Link
                       key={project.name}
                       href={url}
-                      className={gridClass}
+                      className="w-fit"
                     >
                       {card}
                     </Link>
@@ -176,14 +179,14 @@ export default function PortfolioPage() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={gridClass}
+                      className="w-fit"
                     >
                       {card}
                     </a>
                   );
                 }
                 return (
-                  <div key={project.name} className={gridClass}>
+                  <div key={project.name} className="w-fit">
                     {card}
                   </div>
                 );
@@ -192,7 +195,7 @@ export default function PortfolioPage() {
           </Section>
 
           {/* Education */}
-          <Section id="education" title="Education">
+          <Section id="background" title="Background">
             <div className="space-y-4">
                 <p className="leading-relaxed text-base text-muted-foreground">
                   {education.selfTaught.intro}
@@ -257,40 +260,26 @@ export default function PortfolioPage() {
               </div>
             </div>
           </Section>
-
-          {/* Languages */}
-          <Section id="languages" title="Languages">
-              <ul className="space-y-1.5">
-                {languages.map((lang) => (
-                  <li key={lang.name} className="text-base text-muted-foreground">
-                    <span className="text-foreground">{lang.name}</span>
-                    <span className="text-muted-foreground/80"> — {lang.level}</span>
-                  </li>
-                ))}
-              </ul>
-          </Section>
         </main>
 
         {/* Footer */}
-        <footer className="mt-16 rounded-xl border border-border bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10">
-          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:flex-wrap sm:justify-between sm:gap-4 sm:text-left">
-            <div>
-              <Link
-                href="/"
-                className="text-sm font-medium text-foreground transition-colors hover:text-primary"
-              >
-                millify.dev
-              </Link>
-            </div>
+        <footer className="mt-16 rounded-xl bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10">
+          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:text-left">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sm font-medium text-foreground transition-colors hover:text-primary"
+            >
+              millify.dev
+            </Link>
             <a
               href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
             >
               <Mail className="size-4" aria-hidden />
-              Get in touch
+              Get In Touch
             </a>
           </div>
-          <div className="mt-4 flex flex-col items-center justify-between gap-3 border-t border-border/60 pt-4 text-xs text-muted-foreground sm:flex-row">
+          <div className="mt-2 flex flex-col items-center justify-between gap-3 pt-2 text-xs text-muted-foreground sm:flex-row">
             <span>© {new Date().getFullYear()} Hrvoje Mlinarević</span>
             <span>
               <StarTrekPopup />

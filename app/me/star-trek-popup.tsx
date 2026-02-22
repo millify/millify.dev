@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Radio } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -92,14 +93,15 @@ export function StarTrekPopup() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="text-sm text-muted-foreground underline decoration-dotted underline-offset-2 transition-colors hover:text-primary"
+          className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
         >
-          intercepted communication
+          <Radio className="size-4" aria-hidden />
+          Intercepted Communication
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Intercepted communication</DialogTitle>
+          <DialogTitle>Intercepted Communication</DialogTitle>
         </DialogHeader>
         <div className="min-h-[200px] font-mono text-sm leading-relaxed text-muted-foreground">
           {open && <TypewriterDialog key={key} />}
