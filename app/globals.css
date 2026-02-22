@@ -131,3 +131,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Page transition: smooth fade instead of instant swap */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root) {
+    animation: 200ms ease-out both fade-out;
+  }
+  ::view-transition-new(root) {
+    animation: 250ms ease-out 75ms both fade-in;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

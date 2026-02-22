@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { ViewTransitions } from "next-view-transitions";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -38,12 +39,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${dmSans.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} font-sans antialiased`}
-      >
-        <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en" className="dark">
+        <body
+          className={`${dmSans.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} font-sans antialiased`}
+        >
+          <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import {
@@ -8,7 +8,6 @@ import {
   projects,
   skillsByCategory,
   education,
-  interests,
   languages,
 } from "@/lib/portfolio-data";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -259,14 +258,8 @@ export default function PortfolioPage() {
             </div>
           </Section>
 
-          {/* Interests & Languages */}
-          <div className="grid gap-6 md:grid-cols-2 md:gap-8">
-            <Section id="interests" title="Interests">
-              <p className="text-base text-muted-foreground">
-                {interests.join(" · ")}
-              </p>
-            </Section>
-            <Section id="languages" title="Languages">
+          {/* Languages */}
+          <Section id="languages" title="Languages">
               <ul className="space-y-1.5">
                 {languages.map((lang) => (
                   <li key={lang.name} className="text-base text-muted-foreground">
@@ -275,8 +268,7 @@ export default function PortfolioPage() {
                   </li>
                 ))}
               </ul>
-            </Section>
-          </div>
+          </Section>
         </main>
 
         {/* Footer */}
