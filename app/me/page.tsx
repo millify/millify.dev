@@ -108,7 +108,7 @@ export default function PortfolioPage() {
                       <Badge
                         key={tech}
                         variant="secondary"
-                        className="rounded-md border border-primary/20 bg-primary/8 px-1.5 py-0.5 font-mono text-xs text-primary/90 sm:px-2 sm:text-sm"
+                        className="rounded-md border border-primary/20 bg-primary/8 px-1.5 py-0.5 font-mono text-xs text-primary/90"
                       >
                         {tech}
                       </Badge>
