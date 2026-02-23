@@ -36,6 +36,9 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-link: var(--link);
+  --color-accent-violet: var(--accent-violet);
+  --color-accent-coral: var(--accent-coral);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -85,6 +88,12 @@
   /* Custom accent for logo/windmill */
   --accent-champagne: #b8a88a;
   --accent-champagne-muted: #8b7d65;
+  /* Link color – muted teal, complementary to warm primary */
+  --link: oklch(0.42 0.1 205);
+  /* Muted violet accent */
+  --accent-violet: oklch(0.52 0.08 290);
+  /* Warm red-coral accent */
+  --accent-coral: oklch(0.58 0.12 25);
 }
 
 .dark {
@@ -121,6 +130,9 @@
   --sidebar-ring: oklch(0.72 0.08 75);
   --accent-champagne: #b8a88a;
   --accent-champagne-muted: #8b7d65;
+  --link: oklch(0.72 0.1 205);
+  --accent-violet: oklch(0.68 0.1 290);
+  --accent-coral: oklch(0.72 0.12 25);
 }
 
 @layer base {
@@ -130,6 +142,26 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Link color on /me page – warm coral accent */
+.page-me a[href] {
+  color: var(--accent-coral);
+}
+.page-me a[href]:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* Get In Touch links & Intercepted Communication: foreground with underline */
+.page-me a.link-coral,
+.page-me button.link-coral {
+  color: var(--foreground) !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.page-me a.link-coral:hover,
+.page-me button.link-coral:hover {
+  text-decoration: underline;
 }
 
 /* Page transition: smooth fade instead of instant swap */

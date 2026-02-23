@@ -93,7 +93,7 @@ export function StarTrekPopup() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
+          className="link-coral inline-flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors"
         >
           <Radio className="size-4" aria-hidden />
           Intercepted Communication

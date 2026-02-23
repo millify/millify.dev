@@ -21,7 +21,7 @@ import { StarTrekPopup } from "./star-trek-popup";
 import { SquareLogo } from "@/components/square-logo";
 
 export const metadata: Metadata = {
-  title: "Hrvoje Mlinarević | Full-Stack Developer",
+  title: "Hrvoje Mlinarević | Web Dev",
   description: profile.bio,
 };
 
@@ -46,7 +46,7 @@ function Section({
 
 export default function PortfolioPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="page-me min-h-screen bg-background text-foreground">
       {/* Decorative gradient */}
       <div
         className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(184,168,138,0.06),transparent)]"
@@ -55,19 +55,19 @@ export default function PortfolioPage() {
 
       <div className="relative mx-auto max-w-2xl px-4 py-10 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-12 md:px-8 md:py-16">
         {/* Header / Hero */}
-        <header id="top" className="mb-6 pb-6 sm:mb-8 sm:pb-8 md:mb-10 md:pb-10 scroll-mt-20">
+        <header id="top" className="mb-10 sm:mb-12 md:mb-16 scroll-mt-20">
           <nav className="mb-8 flex items-center gap-4 text-base text-muted-foreground sm:mb-10">
             <Link
               href="/"
-              className="min-h-[44px] min-w-[44px] -m-2 flex items-center justify-center rounded p-2 transition-colors hover:text-primary"
+              className="min-h-[44px] min-w-[44px] -m-2 flex items-center justify-center rounded p-2 !text-muted-foreground hover:!no-underline"
             >
               millify.dev
             </Link>
             <span className="text-muted-foreground/60">/</span>
-            <span className="text-foreground">me</span>
+            <span className="text-muted-foreground">me</span>
           </nav>
 
-          <h1 className="mb-1.5 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h1 className="mb-1.5 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             {profile.name}
           </h1>
           <p className="mb-3 text-base text-primary sm:text-lg">{profile.title}</p>
@@ -75,10 +75,10 @@ export default function PortfolioPage() {
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 text-sm">
             <a
               href={`mailto:${profile.email}`}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 self-start rounded-full bg-primary px-5 py-3 font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90 sm:py-2.5 sm:min-h-0"
+              className="link-coral inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors self-start"
             >
-              <Mail className="size-5" aria-hidden />
-              {profile.email}
+              <Mail className="size-4" aria-hidden />
+              Get In Touch
             </a>
           </div>
         </header>
@@ -131,7 +131,7 @@ export default function PortfolioPage() {
                 const url = "url" in project ? project.url : undefined;
                 const isInternal = url?.startsWith("/");
                 const cardClassName = url
-                  ? "border-border bg-card/50 transition-colors hover:border-primary/30 hover:bg-card/80 cursor-pointer"
+                  ? "border-border bg-card/50 transition-colors hover:border-[var(--accent-violet)]/60 hover:bg-[var(--accent-violet)]/10 cursor-pointer"
                   : "border-border bg-card/50 transition-colors hover:border-primary/30";
 
                 const card = (
@@ -166,7 +166,7 @@ export default function PortfolioPage() {
                     <Link
                       key={project.name}
                       href={url}
-                      className="w-fit"
+                      className="w-fit hover:!no-underline"
                     >
                       {card}
                     </Link>
@@ -179,7 +179,7 @@ export default function PortfolioPage() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-fit"
+                      className="w-fit hover:!no-underline"
                     >
                       {card}
                     </a>
@@ -266,7 +266,7 @@ export default function PortfolioPage() {
         <footer className="mt-16 flex flex-col items-center gap-4 text-center rounded-xl bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10 sm:grid sm:grid-cols-2 sm:grid-rows-2 sm:items-center sm:gap-4 sm:text-left">
           <a
             href={`mailto:${profile.email}`}
-            className="inline-flex items-center justify-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary sm:justify-self-end"
+            className="link-coral inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors sm:justify-self-end"
           >
             <Mail className="size-4" aria-hidden />
             Get In Touch
@@ -279,7 +279,7 @@ export default function PortfolioPage() {
           </span>
           <Link
             href="/"
-            className="inline-flex items-center text-sm font-medium text-foreground transition-colors hover:text-primary sm:col-start-1 sm:row-start-1 sm:justify-self-start"
+            className="inline-flex items-center text-sm !text-muted-foreground hover:!no-underline sm:col-start-1 sm:row-start-1 sm:justify-self-start"
           >
             millify.dev
           </Link>

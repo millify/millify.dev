@@ -95,7 +95,7 @@ export const skillsByCategory = {
 export const education = {
   selfTaught: {
     intro:
-      "In 2020, I started learning JavaScript through courses on Udemy and spent a lot of time practicing algorithmic problems on platforms like Codewars. That experience helped me better understand problem-solving and how to write efficient code. By building my own projects along the way, I developed a good technical foundation and became comfortable working with various libraries and frameworks within the JavaScript ecosystem.",
+      "In 2020, I started my programming journey with JavaScript through Udemy courses, learning how to build dynamic web apps. I took a deep dive into algorithmic challenges on platforms like Codewars, which pushed me to improve my problem-solving skills and write more efficient code. By building my own projects along the way, I developed a good technical foundation and became comfortable working with a variety of libraries and frameworks in the JavaScript ecosystem.",
   },
 };
 
