@@ -54,8 +54,8 @@ export default function PortfolioPage() {
       />
 
       <div className="relative mx-auto max-w-2xl px-4 py-10 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-12 md:px-8 md:py-16">
-        {/* Header / Hero */}
-        <header id="top" className="mb-10 sm:mb-12 md:mb-16 scroll-mt-20">
+        {/* Header / Hero - same spacing as between sections (space-y-10 md:space-y-12) */}
+        <header id="top" className="mb-10 md:mb-12 scroll-mt-20">
           <nav className="mb-8 flex items-center gap-4 text-base text-muted-foreground sm:mb-10">
             <Link
               href="/"
@@ -131,7 +131,7 @@ export default function PortfolioPage() {
                 const url = "url" in project ? project.url : undefined;
                 const isInternal = url?.startsWith("/");
                 const cardClassName = url
-                  ? "border-border bg-card/50 transition-colors hover:border-[var(--accent-violet)]/60 hover:bg-[var(--accent-violet)]/10 cursor-pointer"
+                  ? "border-border bg-card/50 transition-colors hover:border-foreground/40 hover:bg-foreground/10 cursor-pointer"
                   : "border-border bg-card/50 transition-colors hover:border-primary/30";
 
                 const card = (
