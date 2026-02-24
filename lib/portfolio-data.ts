@@ -13,7 +13,7 @@ export const experience = [
     company: "KNB",
     role: "Full-Stack Developer",
     description: "Software development agency",
-    tech: ["React", "React Native", "Nest.js", "Node.js", "MySQL", "Docker"],
+    tech: ["React", "React Native", "Node.js", "Nest.js", "Docker", "MySQL"],
     period: "Oct 2024 — Present",
     location: "Croatia (On site)",
     highlights: [
@@ -74,21 +74,21 @@ const DEVICON = (name: string) =>
 
 export const skillsByCategory = {
   frontend: [
-    { name: "HTML", icon: DEVICON("html5") },
-    { name: "CSS", icon: DEVICON("css3") },
-    { name: "JavaScript", icon: DEVICON("javascript") },
-    { name: "TypeScript", icon: DEVICON("typescript") },
-    { name: "React", icon: DEVICON("react") },
-    { name: "Next.js", icon: DEVICON("nextjs") },
-    { name: "Vue.js", icon: DEVICON("vuejs") },
-    { name: "Tailwind CSS", icon: DEVICON("tailwindcss") },
+    { name: "HTML", icon: DEVICON("html5"), docsUrl: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+    { name: "CSS", icon: DEVICON("css3"), docsUrl: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    { name: "JavaScript", icon: DEVICON("javascript"), docsUrl: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { name: "TypeScript", icon: DEVICON("typescript"), docsUrl: "https://www.typescriptlang.org/docs/" },
+    { name: "React", icon: DEVICON("react"), docsUrl: "https://react.dev/" },
+    { name: "Next.js", icon: DEVICON("nextjs"), docsUrl: "https://nextjs.org/docs" },
+    { name: "Vue.js", icon: DEVICON("vuejs"), docsUrl: "https://vuejs.org/guide/" },
+    { name: "Tailwind CSS", icon: DEVICON("tailwindcss"), docsUrl: "https://tailwindcss.com/docs" },
   ],
   backend: [
-    { name: "Node.js", icon: DEVICON("nodejs") },
-    { name: "Nest.js", icon: DEVICON("nestjs") },
-    { name: "MySQL", icon: DEVICON("mysql") },
-    { name: "Docker", icon: DEVICON("docker") },
-    { name: "Shell", icon: DEVICON("bash") },
+    { name: "Node.js", icon: DEVICON("nodejs"), docsUrl: "https://nodejs.org/docs/" },
+    { name: "Nest.js", icon: DEVICON("nestjs"), docsUrl: "https://docs.nestjs.com/" },
+    { name: "MySQL", icon: DEVICON("mysql"), docsUrl: "https://dev.mysql.com/doc/" },
+    { name: "Docker", icon: DEVICON("docker"), docsUrl: "https://docs.docker.com/" },
+    { name: "Shell", icon: DEVICON("bash"), docsUrl: "https://www.gnu.org/software/bash/manual/" },
   ],
 };
 
