@@ -263,7 +263,7 @@ export default function PortfolioPage() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-16 flex flex-col items-center gap-4 text-center rounded-xl bg-muted/40 px-4 py-8 md:mt-20 md:px-6 md:py-10 sm:grid sm:grid-cols-2 sm:grid-rows-2 sm:items-center sm:gap-4 sm:text-left">
+        <footer className="mt-16 flex flex-col items-center gap-4 text-center rounded-xl px-4 py-8 md:mt-20 md:px-6 md:py-10 sm:grid sm:grid-cols-2 sm:grid-rows-2 sm:items-center sm:gap-4 sm:text-left">
           <a
             href={`mailto:${profile.email}`}
             className="link-coral inline-flex items-center justify-center gap-2 text-sm font-medium transition-colors sm:justify-self-end"
