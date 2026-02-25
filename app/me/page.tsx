@@ -173,7 +173,7 @@ export default function PortfolioPage() {
                     <Link
                       key={project.name}
                       href={url}
-                      className="w-fit hover:!no-underline"
+                      className="block w-fit hover:!no-underline"
                     >
                       {card}
                     </Link>
