@@ -11,7 +11,7 @@ export function CrosswitLogo({
   className?: string;
   size?: "default" | "small";
 }) {
-  const fontClass = "font-[family-name:var(--font-audiowide)]";
+  const fontClass = "font-audiowide";
   const isSmall = size === "small";
   const textSizeClass = isSmall ? "text-base" : "text-xl sm:text-2xl";
   const iconSizeClass = isSmall ? "h-4 w-4" : "h-6 w-6";

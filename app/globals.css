@@ -144,6 +144,11 @@
   }
 }
 
+/* Audiowide font for Crosswit logo (from Google Fonts via next/font) */
+.font-audiowide {
+  font-family: var(--font-audiowide), sans-serif;
+}
+
 /* Link color on /me page – warm coral accent */
 .page-me a[href] {
   color: var(--accent-coral);

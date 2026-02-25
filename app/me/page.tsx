@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import { StarTrekPopup } from "./star-trek-popup";
 import { SquareLogo } from "@/components/square-logo";
+import { CrosswitLogo } from "@/components/crosswit-logo";
 
 export const metadata: Metadata = {
   title: "Hrvoje Mlinarević | Web Dev",
@@ -138,7 +139,7 @@ export default function PortfolioPage() {
                   <Card
                     className={cn(
                       "w-fit",
-                      project.name === "Sessions" && "min-w-56",
+                      (project.name === "Sessions" || project.name === "Crosswit") && "min-w-56",
                       cardClassName
                     )}
                   >
@@ -146,6 +147,10 @@ export default function PortfolioPage() {
                       {project.logoSymbol === "square" ? (
                         <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
                           <SquareLogo className="size-5" />
+                        </div>
+                      ) : project.logoSymbol === "crosswit" ? (
+                        <div className="shrink-0 text-foreground">
+                          <CrosswitLogo size="small" className="text-foreground" />
                         </div>
                       ) : project.logo ? (
                         <Image
@@ -156,7 +161,9 @@ export default function PortfolioPage() {
                           className="size-7 shrink-0 rounded object-contain"
                         />
                       ) : null}
-                      <h3 className="text-base font-medium text-foreground">{project.name}</h3>
+                      {project.logoSymbol !== "crosswit" ? (
+                        <h3 className="text-base font-medium text-foreground">{project.name}</h3>
+                      ) : null}
                     </CardHeader>
                   </Card>
                 );

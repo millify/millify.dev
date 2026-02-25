@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Audiowide, DM_Sans, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -19,6 +19,12 @@ const dmSans = DM_Sans({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+});
+
+const audiowide = Audiowide({
+  variable: "--font-audiowide",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -45,7 +51,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" className="dark">
         <body
-          className={`${dmSans.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} font-sans antialiased`}
+          className={`${dmSans.variable} ${jetbrainsMono.variable} ${plusJakartaSans.variable} ${audiowide.variable} font-sans antialiased`}
         >
           <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
         </body>

@@ -23,6 +23,14 @@ export default function ProjectsPage() {
               /projects/sessions
             </Link>
           </li>
+          <li>
+            <Link
+              href="/projects/crosswit"
+              className="text-primary underline-offset-4 transition-colors hover:underline"
+            >
+              /projects/crosswit
+            </Link>
+          </li>
         </ul>
       </div>
     </div>

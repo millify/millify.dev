@@ -57,7 +57,7 @@ export type Project = {
   description?: string;
   url?: string;
   logo?: string;
-  logoSymbol?: "square";
+  logoSymbol?: "square" | "crosswit";
 };
 
 export const projects: Project[] = [
@@ -66,6 +66,12 @@ export const projects: Project[] = [
     description: "Portfolio project",
     logoSymbol: "square",
     url: "/projects/sessions",
+  },
+  {
+    name: "Crosswit",
+    description: "Portfolio project",
+    logoSymbol: "crosswit",
+    url: "/projects/crosswit",
   },
 ];
 
