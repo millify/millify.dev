@@ -86,9 +86,9 @@ export const skillsByCategory = {
   backend: [
     { name: "Node.js", icon: DEVICON("nodejs"), docsUrl: "https://nodejs.org/docs/" },
     { name: "Nest.js", icon: DEVICON("nestjs"), docsUrl: "https://docs.nestjs.com/" },
+    { name: "REST APIs", icon: DEVICON("swagger"), docsUrl: "https://swagger.io/specification/" },
     { name: "MySQL", icon: DEVICON("mysql"), docsUrl: "https://dev.mysql.com/doc/" },
     { name: "Docker", icon: DEVICON("docker"), docsUrl: "https://docs.docker.com/" },
-    { name: "Shell", icon: DEVICON("bash"), docsUrl: "https://www.gnu.org/software/bash/manual/" },
   ],
 };
 
