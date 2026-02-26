@@ -6,6 +6,8 @@ export type LsEntry =
 
 export type LsSection = {
   cdCommand: string;
+  /** Current directory to show after cd (e.g. "~/pages"). Shown as subtle pwd hint. */
+  pwd?: string;
   entries: LsEntry[];
 };
 
@@ -27,7 +29,7 @@ export function treeNodesToLsSections(
           entries.push({ type: "file", name: child.name, href: child.href });
         }
       }
-      sections.push({ cdCommand: "cd pages", entries });
+      sections.push({ cdCommand: "cd pages", pwd: "~/pages", entries });
       break;
     }
   }
@@ -40,7 +42,7 @@ export function treeNodesToLsSections(
           entries.push({ type: "file", name: child.name, href: child.href, displayAsDir: true });
         }
       }
-      sections.push({ cdCommand: "cd ../projects", entries });
+      sections.push({ cdCommand: "cd ../projects", pwd: "~/projects", entries });
       break;
     }
   }

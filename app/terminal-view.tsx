@@ -5,51 +5,77 @@ import { Terminal } from "@/components/terminal-ls";
 import { MillifyLogo } from "@/components/millify-logo";
 import type { LsSection } from "@/lib/terminal-ls-data";
 
-const WIDE_BREAKPOINT = 640; // Tailwind sm – compact ls view
-const LOGO_OUTSIDE_MAX_WIDTH = 480; // Very small: show logo outside terminal, hide in header
+/** Very small: logo above terminal, simple ls -R. Small/medium: ls -o. Large: ls -lh with group. */
+const LOGO_OUTSIDE_MAX_WIDTH = 480;
+const LARGE_MIN_WIDTH = 1024; // Tailwind lg – full ls -lh with group column
 
 export function TerminalView({ sections }: { sections: LsSection[] }) {
-  const [compact, setCompact] = useState(true);
+  const [layoutReady, setLayoutReady] = useState(false);
   const [showLogoOutside, setShowLogoOutside] = useState(true);
+  const [compact, setCompact] = useState(true);
+  const [isLarge, setIsLarge] = useState(false);
 
   useEffect(() => {
-    const mqlCompact = window.matchMedia(`(min-width: ${WIDE_BREAKPOINT}px)`);
-    const mqlLogo = window.matchMedia(`(min-width: ${LOGO_OUTSIDE_MAX_WIDTH}px)`);
+    const mqlLogo = window.matchMedia(`(max-width: ${LOGO_OUTSIDE_MAX_WIDTH - 1}px)`);
+    const mqlLarge = window.matchMedia(`(min-width: ${LARGE_MIN_WIDTH}px)`);
     const update = () => {
-      setCompact(!mqlCompact.matches);
-      setShowLogoOutside(!mqlLogo.matches);
+      setShowLogoOutside(mqlLogo.matches);
+      setCompact(mqlLogo.matches);
+      setIsLarge(mqlLarge.matches);
     };
     update();
-    mqlCompact.addEventListener("change", update);
+    setLayoutReady(true);
     mqlLogo.addEventListener("change", update);
+    mqlLarge.addEventListener("change", update);
     return () => {
-      mqlCompact.removeEventListener("change", update);
       mqlLogo.removeEventListener("change", update);
+      mqlLarge.removeEventListener("change", update);
     };
   }, []);
 
+  const terminalProps = {
+    sections,
+    compact,
+    hideHeaderLogo: showLogoOutside,
+    hideGroup: !compact && !isLarge,
+  };
+
+  if (!layoutReady) {
+    return (
+      <div
+        className="w-full max-w-[900px] min-h-dvh overflow-hidden rounded-lg border border-border bg-muted/40 shadow-md opacity-0 pointer-events-none"
+        aria-hidden
+      >
+        <div className="flex min-h-8 items-center justify-between gap-2 border-b border-border bg-muted/60 px-6 py-0">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="size-2.5 rounded-full bg-red-500/80 shrink-0" aria-hidden />
+            <span className="size-2.5 rounded-full bg-amber-500/80 shrink-0" aria-hidden />
+            <span className="size-2.5 rounded-full bg-emerald-500/80 shrink-0" aria-hidden />
+          </div>
+        </div>
+        <div className="min-h-[200px] py-4" />
+      </div>
+    );
+  }
+
   if (showLogoOutside) {
     return (
-      <div className="flex flex-col gap-y-1 w-full max-w-[900px]">
-        <div className="flex justify-center">
+      <div className="grid min-h-dvh w-full grid-rows-[auto_1fr] content-start animate-in fade-in-0 duration-200">
+        <div className="flex justify-center pt-8">
           <div className="scale-[0.5] origin-center">
             <MillifyLogo />
           </div>
         </div>
-        <Terminal
-          sections={sections}
-          compact={compact}
-          hideHeaderLogo
-        />
+        <div className="grid place-content-center place-items-center min-h-0 -mt-14">
+          <Terminal {...terminalProps} />
+        </div>
       </div>
     );
   }
 
   return (
-    <Terminal
-      sections={sections}
-      compact={compact}
-      hideHeaderLogo={false}
-    />
+    <div className="animate-in fade-in-0 duration-200">
+      <Terminal {...terminalProps} />
+    </div>
   );
 }

@@ -23,12 +23,31 @@ export interface TerminalProps {
   compact?: boolean;
   /** When true, hide the logo in the terminal header (e.g. when shown outside on very small screens). */
   hideHeaderLogo?: boolean;
+  /** When true, show ls -o style (omit group column) for medium screens. */
+  hideGroup?: boolean;
 }
 
-const PROMPT = "~ ❯";
+const PROMPT_PREFIX = "~ ";
+const PROMPT_ARROW = "❯";
+const PROMPT = (
+  <>
+    <span className="text-primary">{PROMPT_PREFIX}</span>
+    <span className="text-emerald-500">{PROMPT_ARROW}</span>
+  </>
+);
+/** Prompt with optional pwd (e.g. ~/pages ❯) instead of ~ ❯ on the same line. */
+function promptWithPath(pwd?: string) {
+  const prefix = pwd != null ? `${pwd} ` : PROMPT_PREFIX;
+  return (
+    <>
+      <span className="text-primary">{prefix}</span>
+      <span className="text-emerald-500">{PROMPT_ARROW}</span>
+    </>
+  );
+}
 const DEFAULT_TITLE = "ssh root@millify.dev";
-/** Same height for every terminal body line (commands, total, ls rows). */
-const BODY_ROW_CLASS = "flex h-8 items-center";
+/** Same height for every terminal body line. Small/medium: smaller; large: normal. */
+const BODY_ROW_CLASS = "flex h-7 lg:h-8 items-center";
 
 export function Terminal({
   entries: entriesProp,
@@ -37,6 +56,7 @@ export function Terminal({
   title = DEFAULT_TITLE,
   compact = false,
   hideHeaderLogo = false,
+  hideGroup = false,
 }: TerminalProps) {
   const hasSections = sectionsProp && sectionsProp.length > 0;
   const sections = hasSections
@@ -47,71 +67,82 @@ export function Terminal({
 
   return (
     <div className="w-full max-w-[900px] overflow-hidden rounded-lg border border-border bg-muted/40 shadow-md">
-      {/* Terminal header */}
-      <div className="flex min-h-8 items-center justify-between gap-2 border-b border-border bg-muted/60 px-6 py-0">
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="size-2.5 rounded-full bg-red-500/80 shrink-0" aria-hidden />
-          <span className="size-2.5 rounded-full bg-amber-500/80 shrink-0" aria-hidden />
-          <span className="size-2.5 rounded-full bg-emerald-500/80 shrink-0" aria-hidden />
-          <span className="ml-2 font-mono text-xs text-muted-foreground truncate">{title}</span>
+      {/* Terminal header – smaller on tiny/small/medium; normal on large */}
+      <div className="flex min-h-7 lg:min-h-8 items-center justify-between gap-1.5 lg:gap-2 border-b border-border bg-muted/60 px-4 lg:px-6 py-0">
+        <div className="flex min-w-0 items-center gap-1.5 lg:gap-2">
+          <span className="size-2 lg:size-2.5 rounded-full bg-red-500/80 shrink-0" aria-hidden />
+          <span className="size-2 lg:size-2.5 rounded-full bg-amber-500/80 shrink-0" aria-hidden />
+          <span className="size-2 lg:size-2.5 rounded-full bg-emerald-500/80 shrink-0" aria-hidden />
+          <span className="ml-1.5 lg:ml-2 font-mono text-[11px] lg:text-xs text-muted-foreground truncate">{title}</span>
         </div>
         <div
-          className={`shrink-0 scale-[0.58] origin-right relative top-[-2px] ${hideHeaderLogo ? "hidden" : "block"}`}
+          className={`shrink-0 scale-[0.5] lg:scale-[0.58] origin-right relative top-[-2px] ${hideHeaderLogo ? "hidden" : "block"}`}
         >
           <MillifyLogo />
         </div>
       </div>
 
-      {/* Terminal body */}
-      <div className="overflow-x-auto py-4 font-mono text-sm">
-        <div className={`px-6 ${compact ? "" : "min-w-max"}`}>
+      {/* Terminal body – smaller on tiny/small/medium; normal on large */}
+      <div className="overflow-x-auto py-3 lg:py-4 font-mono text-xs lg:text-sm">
+        <div className={`px-4 lg:px-6 ${compact ? "" : "min-w-max"}`}>
         {sections.map((section, sectionIndex) => {
           const showPrompt = section.cdCommand.length > 0;
           return (
             <div key={sectionIndex} className={sectionIndex > 0 ? "mt-0" : ""}>
               {showPrompt && (
                 <div className={`${BODY_ROW_CLASS} gap-2 text-muted-foreground`}>
-                  <span className="text-primary">{PROMPT}</span>
+                  {PROMPT}
                   <span>{section.cdCommand}</span>
-                </div>
-              )}
-              {showPrompt && (
-                <div className={`${BODY_ROW_CLASS} gap-2 text-muted-foreground`}>
-                  <span className="text-primary">{PROMPT}</span>
-                  <span>{compact ? "ls" : "ls -lh"}</span>
                 </div>
               )}
               {!showPrompt && promptProp != null && (
                 <div className={`${BODY_ROW_CLASS} gap-2 text-muted-foreground`}>
-                  <span className="text-primary">{PROMPT}</span>
+                  {PROMPT}
                   <span>{promptProp}</span>
                 </div>
               )}
               {compact ? (
-                <div className="flex flex-wrap gap-x-2 gap-y-1 items-baseline">
-                  {section.entries.map((entry, i) => {
-                    const nameClass = lsEntryIsDirStyle(entry) ? "text-primary font-medium" : "text-foreground";
-                    const name = lsEntryDisplayName(entry);
-                    if (entry.type === "file") {
+                <>
+                  <div className={`${BODY_ROW_CLASS} gap-2 text-muted-foreground`}>
+                    {promptWithPath(section.pwd)}
+                    <span>ls</span>
+                  </div>
+                  <div className="flex flex-wrap items-baseline justify-start gap-x-1.5 lg:gap-x-2 gap-y-0.5 lg:gap-y-1">
+                    {section.entries.map((entry, i) => {
+                      const isProjectsDir = section.pwd === "~/projects" && lsEntryIsDirStyle(entry);
+                      const nameClass = lsEntryIsDirStyle(entry)
+                        ? isProjectsDir
+                          ? "text-foreground font-medium"
+                          : "text-primary font-medium"
+                        : "text-foreground";
+                      const name = lsEntryDisplayName(entry);
+                      if (entry.type === "file") {
+                        return (
+                          <Link
+                            key={`${sectionIndex}-${entry.name}-${i}`}
+                            href={entry.href}
+                            className={`${nameClass} hover:underline focus:outline-none focus:ring-2 focus:ring-primary/50 rounded`}
+                          >
+                            {name}
+                          </Link>
+                        );
+                      }
                       return (
-                        <Link
-                          key={`${sectionIndex}-${entry.name}-${i}`}
-                          href={entry.href}
-                          className={`${nameClass} hover:underline focus:outline-none focus:ring-2 focus:ring-primary/50 rounded`}
-                        >
+                        <span key={`${sectionIndex}-${entry.name}-${i}`} className={nameClass}>
                           {name}
-                        </Link>
+                        </span>
                       );
-                    }
-                    return (
-                      <span key={`${sectionIndex}-${entry.name}-${i}`} className={nameClass}>
-                        {name}
-                      </span>
-                    );
-                  })}
-                </div>
+                    })}
+                  </div>
+                </>
               ) : (
                 <>
+                  {showPrompt && (
+                    <div className={`${BODY_ROW_CLASS} gap-2 text-muted-foreground`}>
+                      {promptWithPath(section.pwd)}
+                      <span>{hideGroup ? "ls -o" : "ls -lh"}</span>
+                    </div>
+                  )}
                   <div className={`${BODY_ROW_CLASS} gap-3 text-muted-foreground`}>
                     <span className="shrink-0 tabular-nums">total 8.0K</span>
                   </div>
@@ -119,6 +150,8 @@ export function Terminal({
                     <TerminalLsRow
                       key={`${sectionIndex}-${entry.name}-${i}`}
                       entry={entry}
+                      nameColor={section.pwd === "~/projects" ? "foreground" : "primary"}
+                      hideGroup={hideGroup}
                     />
                   ))}
                 </>
