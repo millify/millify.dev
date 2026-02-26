@@ -157,6 +157,12 @@
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+/* Project card links: no coral, no underline */
+.page-me a.project-card-link,
+.page-me a.project-card-link:hover {
+  color: var(--foreground);
+  text-decoration: none;
+}
 /* Get In Touch links & Intercepted Communication: foreground with underline */
 .page-me a.link-coral,
 .page-me button.link-coral {

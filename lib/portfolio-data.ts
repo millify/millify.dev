@@ -64,13 +64,11 @@ export const projects: Project[] = [
   {
     name: "Sessions",
     description: "Portfolio project",
-    logoSymbol: "square",
     url: "/projects/sessions",
   },
   {
     name: "Crosswit",
     description: "Portfolio project",
-    logoSymbol: "crosswit",
     url: "/projects/crosswit",
   },
 ];

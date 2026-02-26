@@ -9,7 +9,6 @@ import {
   skillsByCategory,
   education,
 } from "@/lib/portfolio-data";
-import { cn } from "@/lib/utils";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,13 +17,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { StarTrekPopup } from "./star-trek-popup";
-import { SquareLogo } from "@/components/square-logo";
+import { SessionLogo } from "@/components/session-logo";
 import { CrosswitLogo } from "@/components/crosswit-logo";
 
 export const metadata: Metadata = {
   title: "Hrvoje Mlinarević | Web Dev",
   description: profile.bio,
 };
+
+/** Shared 2-column grid so Projects and Technologies cards have the same width */
+const TWO_COL_GRID =
+  "grid gap-4 w-full grid-cols-[minmax(0,1fr)_minmax(0,1fr)]";
 
 function Section({
   id,
@@ -71,8 +74,12 @@ export default function PortfolioPage() {
           <h1 className="mb-1.5 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
             {profile.name}
           </h1>
-          <p className="mb-3 text-base text-primary sm:text-lg">{profile.title}</p>
-          <p className="mb-4 max-w-xl text-base text-muted-foreground">{profile.tagline}</p>
+          <p className="mb-3 text-base text-primary sm:text-lg">
+            {profile.title}
+          </p>
+          <p className="mb-4 max-w-xl text-base text-muted-foreground">
+            {profile.tagline}
+          </p>
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 text-sm">
             <a
               href={`mailto:${profile.email}`}
@@ -85,22 +92,21 @@ export default function PortfolioPage() {
         </header>
 
         <main className="space-y-10 md:space-y-12">
-          {/* About */}
-          {/* <Section id="about" title="About">
-            <p className="leading-relaxed text-muted-foreground">{profile.bio}</p>
-          </Section> */}
-
           {/* Experience */}
           <Section id="experience" title="Experience">
             <ul className="space-y-6 sm:space-y-8">
               {experience.map((job) => (
                 <li key={job.company} className="border-l-2 border-border pl-4">
                   <div className="mb-1 flex flex-wrap items-baseline gap-2">
-                    <h3 className="text-base font-semibold text-foreground">{job.company}</h3>
+                    <h3 className="text-base font-semibold text-foreground">
+                      {job.company}
+                    </h3>
                     <span className="text-sm text-muted-foreground/80">·</span>
                     <span className="text-base text-primary">{job.role}</span>
                   </div>
-                  <p className="mb-2 text-base text-muted-foreground">{job.description}</p>
+                  <p className="mb-2 text-base text-muted-foreground">
+                    {job.description}
+                  </p>
                   <p className="mb-3 text-sm text-muted-foreground/80">
                     {job.period} · {job.location}
                   </p>
@@ -127,73 +133,28 @@ export default function PortfolioPage() {
 
           {/* Projects */}
           <Section id="projects" title="Projects">
-            <ul className="flex flex-wrap gap-4">
+            <ul className={TWO_COL_GRID}>
               {projects.map((project) => {
-                const url = "url" in project ? project.url : undefined;
-                const isInternal = url?.startsWith("/");
-                const cardClassName = url
-                  ? "border-border bg-card/50 transition-colors hover:border-foreground/40 hover:bg-foreground/10 cursor-pointer"
-                  : "border-border bg-card/50 transition-colors hover:border-primary/30";
-
                 const cardContent = (
                   <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 py-4 sm:px-6">
-                    {project.logoSymbol === "square" ? (
-                      <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
-                        <SquareLogo className="size-5" />
-                      </div>
-                    ) : project.logoSymbol === "crosswit" ? (
+                    {project.name === "Sessions" ? (
                       <div className="shrink-0 text-foreground">
-                        <CrosswitLogo size="small" className="text-foreground" />
+                        <SessionLogo />
                       </div>
-                    ) : project.logo ? (
-                      <Image
-                        src={project.logo}
-                        alt=""
-                        width={28}
-                        height={28}
-                        className="size-7 shrink-0 rounded object-contain"
-                      />
-                    ) : null}
-                    {project.logoSymbol !== "crosswit" ? (
-                      <h3 className="text-base font-medium text-foreground">{project.name}</h3>
+                    ) : project.name === "Crosswit" ? (
+                      <CrosswitLogo className="text-foreground" />
                     ) : null}
                   </CardHeader>
                 );
-
-                const cardWrapperClassName = cn(
-                  "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm w-fit",
-                  (project.logoSymbol === "square" || project.logoSymbol === "crosswit") && "min-w-56",
-                  cardClassName
-                );
-
-                if (isInternal && url) {
-                  return (
-                    <Link
-                      key={project.name}
-                      href={url}
-                      className={cn("block hover:!no-underline", cardWrapperClassName)}
-                    >
-                      {cardContent}
-                    </Link>
-                  );
-                }
-                if (url) {
-                  return (
-                    <a
-                      key={project.name}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn("block hover:!no-underline", cardWrapperClassName)}
-                    >
-                      {cardContent}
-                    </a>
-                  );
-                }
                 return (
-                  <Card key={project.name} className={cn("w-fit", cardClassName)}>
-                    {cardContent}
-                  </Card>
+                  <Link href={project.url || ""} className="project-card-link min-w-0">
+                    <Card
+                      key={project.name}
+                      className="h-full w-full min-w-0 border-border bg-card/50 text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm transition-colors hover:border-foreground/40 hover:bg-foreground/10 cursor-pointer"
+                    >
+                      {cardContent}
+                    </Card>
+                  </Link>
                 );
               })}
             </ul>
@@ -202,16 +163,16 @@ export default function PortfolioPage() {
           {/* Education */}
           <Section id="background" title="Background">
             <div className="space-y-4">
-                <p className="leading-relaxed text-base text-muted-foreground">
-                  {education.selfTaught.intro}
-                </p>
+              <p className="leading-relaxed text-base text-muted-foreground">
+                {education.selfTaught.intro}
+              </p>
             </div>
           </Section>
 
           {/* Skills */}
           <Section id="skills" title="Technologies">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-border bg-muted/20 p-4">
+            <div className={TWO_COL_GRID}>
+              <div className="min-w-0 rounded-xl border border-border bg-muted/20 p-4">
                 <span className="mb-3 block text-sm font-semibold uppercase tracking-wider text-primary">
                   Frontend
                 </span>
