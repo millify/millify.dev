@@ -21,6 +21,8 @@ export interface TerminalProps {
   title?: string;
   /** When true, show plain `ls` output (names only, flex wrap) for small screens. */
   compact?: boolean;
+  /** When true, hide the logo in the terminal header (e.g. when shown outside on very small screens). */
+  hideHeaderLogo?: boolean;
 }
 
 const PROMPT = "~ ❯";
@@ -34,6 +36,7 @@ export function Terminal({
   prompt: promptProp,
   title = DEFAULT_TITLE,
   compact = false,
+  hideHeaderLogo = false,
 }: TerminalProps) {
   const hasSections = sectionsProp && sectionsProp.length > 0;
   const sections = hasSections
@@ -52,7 +55,9 @@ export function Terminal({
           <span className="size-2.5 rounded-full bg-emerald-500/80 shrink-0" aria-hidden />
           <span className="ml-2 font-mono text-xs text-muted-foreground truncate">{title}</span>
         </div>
-        <div className="shrink-0 scale-[0.58] origin-right relative top-[-2px]">
+        <div
+          className={`shrink-0 scale-[0.58] origin-right relative top-[-2px] ${hideHeaderLogo ? "hidden" : "block"}`}
+        >
           <MillifyLogo />
         </div>
       </div>
