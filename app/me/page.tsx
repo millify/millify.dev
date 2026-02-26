@@ -147,9 +147,8 @@ export default function PortfolioPage() {
                   </CardHeader>
                 );
                 return (
-                  <a href={project.url || ""} className="project-card-link min-w-0 block">
+                  <a key={project.name} href={project.url || ""} className="project-card-link min-w-0 block">
                     <Card
-                      key={project.name}
                       className="h-full w-full min-w-0 border-border bg-card/50 text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm transition-colors hover:border-foreground/40 hover:bg-foreground/10 cursor-pointer"
                     >
                       {cardContent}
