@@ -1,9 +1,9 @@
-import { Terminal } from "@/components/terminal-ls";
 import {
   getPagesTreeNodes,
   getProjectsTreeNodes,
 } from "@/lib/directory-tree-data";
 import { treeNodesToLsSections } from "@/lib/terminal-ls-data";
+import { TerminalView } from "./terminal-view";
 
 export default function Home() {
   const pagesNodes = getPagesTreeNodes();
@@ -16,8 +16,8 @@ export default function Home() {
         className="pointer-events-none fixed inset-0 bg-[linear-gradient(to_bottom,rgba(184,168,138,0.06)_0%,transparent_40%,transparent_60%,rgba(184,168,138,0.04)_100%)]"
         aria-hidden
       />
-      <div className="relative flex flex-col items-center gap-y-6 -mt-24">
-        <Terminal sections={sections} />
+      <div className="relative flex flex-col items-center gap-y-6 -mt-24 px-3 sm:px-0">
+        <TerminalView sections={sections} />
       </div>
     </div>
   );

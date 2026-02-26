@@ -34,21 +34,21 @@ export function getProjectsTreeNodes(): TreeNode[] {
   const crosswitProject = projects.find((p) => p.name === "Crosswit");
 
   const projectApps: TreeNode[] = [];
-  if (sessionsProject?.url) {
-    projectApps.push({
-      id: "sessions",
-      name: "sessions",
-      type: "app",
-      href: sessionsProject.url,
-      icon: nextjsIconUrl,
-    });
-  }
   if (crosswitProject?.url) {
     projectApps.push({
       id: "crosswit",
       name: "crosswit",
       type: "app",
       href: crosswitProject.url,
+      icon: nextjsIconUrl,
+    });
+  }
+  if (sessionsProject?.url) {
+    projectApps.push({
+      id: "sessions",
+      name: "sessions",
+      type: "app",
+      href: sessionsProject.url,
       icon: nextjsIconUrl,
     });
   }

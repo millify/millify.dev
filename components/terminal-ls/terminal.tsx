@@ -1,8 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { MillifyLogo } from "@/components/millify-logo";
 import { TerminalLsRow } from "./terminal-ls-row";
-import type { LsEntry, LsSection } from "@/lib/terminal-ls-data";
+import {
+  type LsEntry,
+  type LsSection,
+  lsEntryDisplayName,
+  lsEntryIsDirStyle,
+} from "@/lib/terminal-ls-data";
 
 export interface TerminalProps {
   /** Single flat list (one ls output). Used when sections not provided. */
@@ -13,6 +19,8 @@ export interface TerminalProps {
   prompt?: string;
   /** Optional title in the terminal header (e.g. "ssh user@host") */
   title?: string;
+  /** When true, show plain `ls` output (names only, flex wrap) for small screens. */
+  compact?: boolean;
 }
 
 const PROMPT = "~ ❯";
@@ -25,6 +33,7 @@ export function Terminal({
   sections: sectionsProp,
   prompt: promptProp,
   title = DEFAULT_TITLE,
+  compact = false,
 }: TerminalProps) {
   const hasSections = sectionsProp && sectionsProp.length > 0;
   const sections = hasSections
@@ -50,7 +59,7 @@ export function Terminal({
 
       {/* Terminal body */}
       <div className="overflow-x-auto py-4 font-mono text-sm">
-        <div className="px-6 min-w-max">
+        <div className={`px-6 ${compact ? "" : "min-w-max"}`}>
         {sections.map((section, sectionIndex) => {
           const showPrompt = section.cdCommand.length > 0;
           return (
@@ -64,7 +73,7 @@ export function Terminal({
               {showPrompt && (
                 <div className={`${BODY_ROW_CLASS} gap-2 text-muted-foreground`}>
                   <span className="text-primary">{PROMPT}</span>
-                  <span>ls -lh</span>
+                  <span>{compact ? "ls" : "ls -lh"}</span>
                 </div>
               )}
               {!showPrompt && promptProp != null && (
@@ -73,15 +82,42 @@ export function Terminal({
                   <span>{promptProp}</span>
                 </div>
               )}
-              <div className={`${BODY_ROW_CLASS} gap-3 text-muted-foreground`}>
-                <span className="shrink-0 tabular-nums">total 8.0K</span>
-              </div>
-              {section.entries.map((entry, i) => (
-                <TerminalLsRow
-                  key={`${sectionIndex}-${entry.name}-${i}`}
-                  entry={entry}
-                />
-              ))}
+              {compact ? (
+                <div className="flex flex-wrap gap-x-2 gap-y-1 items-baseline">
+                  {section.entries.map((entry, i) => {
+                    const nameClass = lsEntryIsDirStyle(entry) ? "text-primary font-medium" : "text-foreground";
+                    const name = lsEntryDisplayName(entry);
+                    if (entry.type === "file") {
+                      return (
+                        <Link
+                          key={`${sectionIndex}-${entry.name}-${i}`}
+                          href={entry.href}
+                          className={`${nameClass} hover:underline focus:outline-none focus:ring-2 focus:ring-primary/50 rounded`}
+                        >
+                          {name}
+                        </Link>
+                      );
+                    }
+                    return (
+                      <span key={`${sectionIndex}-${entry.name}-${i}`} className={nameClass}>
+                        {name}
+                      </span>
+                    );
+                  })}
+                </div>
+              ) : (
+                <>
+                  <div className={`${BODY_ROW_CLASS} gap-3 text-muted-foreground`}>
+                    <span className="shrink-0 tabular-nums">total 8.0K</span>
+                  </div>
+                  {section.entries.map((entry, i) => (
+                    <TerminalLsRow
+                      key={`${sectionIndex}-${entry.name}-${i}`}
+                      entry={entry}
+                    />
+                  ))}
+                </>
+              )}
             </div>
           );
         })}

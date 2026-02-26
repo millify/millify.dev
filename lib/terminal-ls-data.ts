@@ -4,41 +4,6 @@ export type LsEntry =
   | { type: "dir"; name: string }
   | { type: "file"; name: string; href: string; /** Style as directory (color + trailing /) */ displayAsDir?: boolean };
 
-/**
- * Flatten directory tree nodes into ls -lah style entries:
- * directory first (with trailing /), then its file/link children.
- */
-export function treeNodesToLsEntries(
-  pagesNodes: TreeNode[],
-  projectsNodes: TreeNode[]
-): LsEntry[] {
-  const entries: LsEntry[] = [];
-
-  for (const node of pagesNodes) {
-    if (node.type === "folder") {
-      entries.push({ type: "dir", name: node.name });
-      for (const child of node.children) {
-        if (child.type === "app" && child.href) {
-          entries.push({ type: "file", name: child.name, href: child.href });
-        }
-      }
-    }
-  }
-
-  for (const node of projectsNodes) {
-    if (node.type === "folder") {
-      entries.push({ type: "dir", name: node.name });
-      for (const child of node.children) {
-        if (child.type === "app" && child.href) {
-          entries.push({ type: "file", name: child.name, href: child.href, displayAsDir: true });
-        }
-      }
-    }
-  }
-
-  return entries;
-}
-
 export type LsSection = {
   cdCommand: string;
   entries: LsEntry[];
@@ -81,6 +46,19 @@ export function treeNodesToLsSections(
   }
 
   return sections;
+}
+
+/** Display name for an entry (dir or displayAsDir gets trailing /). */
+export function lsEntryDisplayName(entry: LsEntry): string {
+  if (entry.type === "dir" || (entry.type === "file" && entry.displayAsDir)) {
+    return `${entry.name}/`;
+  }
+  return entry.name;
+}
+
+/** Whether to style entry as a directory (trailing /, primary color). */
+export function lsEntryIsDirStyle(entry: LsEntry): boolean {
+  return entry.type === "dir" || (entry.type === "file" && entry.displayAsDir === true);
 }
 
 /** Fake "size" for ls -lh: human-readable (e.g. 4.0K). */
