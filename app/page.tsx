@@ -11,7 +11,7 @@ export default function Home() {
   const sections = treeNodesToLsSections(pagesNodes, projectsNodes);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
+    <div className="flex min-h-screen flex-col items-center justify-start pt-8 min-[481px]:justify-center min-[481px]:pt-0 bg-background text-foreground">
       <div
         className="pointer-events-none fixed inset-0 bg-[linear-gradient(to_bottom,rgba(184,168,138,0.06)_0%,transparent_40%,transparent_60%,rgba(184,168,138,0.04)_100%)]"
         aria-hidden

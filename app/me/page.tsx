@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   description: profile.bio,
 };
 
-/** Shared 2-column grid so Projects and Technologies cards have the same width */
+/** Responsive grid: 1 column on small screens, 2 columns from sm up (Projects & Technologies) */
 const TWO_COL_GRID =
-  "grid gap-4 w-full grid-cols-[minmax(0,1fr)_minmax(0,1fr)]";
+  "grid gap-4 w-full grid-cols-1 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]";
 
 function Section({
   id,

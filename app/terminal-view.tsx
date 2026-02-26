@@ -31,8 +31,8 @@ export function TerminalView({ sections }: { sections: LsSection[] }) {
   if (showLogoOutside) {
     return (
       <div className="flex flex-col gap-y-1 w-full max-w-[900px]">
-        <div className="flex justify-start">
-          <div className="scale-[0.5] origin-left">
+        <div className="flex justify-center">
+          <div className="scale-[0.5] origin-center">
             <MillifyLogo />
           </div>
         </div>
