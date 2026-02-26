@@ -135,37 +135,35 @@ export default function PortfolioPage() {
                   ? "border-border bg-card/50 transition-colors hover:border-foreground/40 hover:bg-foreground/10 cursor-pointer"
                   : "border-border bg-card/50 transition-colors hover:border-primary/30";
 
-                const card = (
-                  <Card
-                    className={cn(
-                      "w-fit",
-                      (project.name === "Sessions" || project.name === "Crosswit") && "min-w-56",
-                      cardClassName
-                    )}
-                  >
-                    <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 py-4 sm:px-6">
-                      {project.logoSymbol === "square" ? (
-                        <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
-                          <SquareLogo className="size-5" />
-                        </div>
-                      ) : project.logoSymbol === "crosswit" ? (
-                        <div className="shrink-0 text-foreground">
-                          <CrosswitLogo size="small" className="text-foreground" />
-                        </div>
-                      ) : project.logo ? (
-                        <Image
-                          src={project.logo}
-                          alt=""
-                          width={28}
-                          height={28}
-                          className="size-7 shrink-0 rounded object-contain"
-                        />
-                      ) : null}
-                      {project.logoSymbol !== "crosswit" ? (
-                        <h3 className="text-base font-medium text-foreground">{project.name}</h3>
-                      ) : null}
-                    </CardHeader>
-                  </Card>
+                const cardContent = (
+                  <CardHeader className="flex flex-row items-center justify-center gap-3 px-4 py-4 sm:px-6">
+                    {project.logoSymbol === "square" ? (
+                      <div className="size-7 shrink-0 flex items-center justify-center text-foreground">
+                        <SquareLogo className="size-5" />
+                      </div>
+                    ) : project.logoSymbol === "crosswit" ? (
+                      <div className="shrink-0 text-foreground">
+                        <CrosswitLogo size="small" className="text-foreground" />
+                      </div>
+                    ) : project.logo ? (
+                      <Image
+                        src={project.logo}
+                        alt=""
+                        width={28}
+                        height={28}
+                        className="size-7 shrink-0 rounded object-contain"
+                      />
+                    ) : null}
+                    {project.logoSymbol !== "crosswit" ? (
+                      <h3 className="text-base font-medium text-foreground">{project.name}</h3>
+                    ) : null}
+                  </CardHeader>
+                );
+
+                const cardWrapperClassName = cn(
+                  "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm w-fit",
+                  (project.logoSymbol === "square" || project.logoSymbol === "crosswit") && "min-w-56",
+                  cardClassName
                 );
 
                 if (isInternal && url) {
@@ -173,9 +171,9 @@ export default function PortfolioPage() {
                     <Link
                       key={project.name}
                       href={url}
-                      className="block w-fit hover:!no-underline"
+                      className={cn("block hover:!no-underline", cardWrapperClassName)}
                     >
-                      {card}
+                      {cardContent}
                     </Link>
                   );
                 }
@@ -186,16 +184,16 @@ export default function PortfolioPage() {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-fit hover:!no-underline"
+                      className={cn("block hover:!no-underline", cardWrapperClassName)}
                     >
-                      {card}
+                      {cardContent}
                     </a>
                   );
                 }
                 return (
-                  <div key={project.name} className="w-fit">
-                    {card}
-                  </div>
+                  <Card key={project.name} className={cn("w-fit", cardClassName)}>
+                    {cardContent}
+                  </Card>
                 );
               })}
             </ul>
