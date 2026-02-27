@@ -1,7 +1,7 @@
 # Deploy Millify (Next.js) to Hetzner.
 # Mirrors manual flow: pull → install → build → start
 # Required secrets: SERVER_HOST, SERVER_USER, SSH_PRIVATE_KEY
-# Optional secret: PORT (default 3000)
+# Port is set in ecosystem.config.cjs (default 3000).
 # Server needs: Node 20+, npm, PM2 (npm i -g pm2), git, repo cloned at /home/hrvoje/apps/millify
 name: Deploy
 
@@ -25,24 +25,18 @@ jobs:
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Pull, install, build and restart
-        env:
-          DEPLOY_PORT: ${{ secrets.PORT }}
         run: |
-          PORT_ENV=$([ -n "$DEPLOY_PORT" ] && echo "PORT=$DEPLOY_PORT" || echo "")
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST \
             "cd /home/hrvoje/apps/millify && \
             git pull && \
             npm ci && \
             npm run build && \
-            $PORT_ENV pm2 restart millify --update-env 2>/dev/null || \
-            $PORT_ENV pm2 start npm --name millify -- start && \
+            pm2 reload ecosystem.config.cjs --update-env 2>/dev/null || pm2 start ecosystem.config.cjs && \
             pm2 save"
 
       - name: Verify deployment
-        env:
-          DEPLOY_PORT: ${{ secrets.PORT }}
         run: |
-          VERIFY_PORT=${DEPLOY_PORT:-3000}
+          VERIFY_PORT=3000
           DEPLOYED_ID=$(ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "cat /home/hrvoje/apps/millify/.next/BUILD_ID 2>/dev/null" || echo "unknown")
           echo "Deployed BUILD_ID: $DEPLOYED_ID"
           HTTP_CODE=$(ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new $SSH_USER@$SSH_HOST "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:$VERIFY_PORT/ --connect-timeout 5" || echo "000")
